@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-    <canvas id="id-canvas" width="400" height="300"></canvas>
+    <canvas id="id-canvas" width="800" height="600"></canvas>
     <script>
         var log = console.log.bind(console)
 
@@ -24,8 +24,8 @@
             var image = imageFromPath('paddle.png')
             var o = {
                 image: image,
-                x: 100,
-                y: 250,
+                x: 400,
+                y: 548,
                 speed: 5,
             }
             o.moveLeft = function() {
@@ -50,8 +50,8 @@
             var image = imageFromPath('ball.png')
             var o = {
                 image: image,
-                x: 100,
-                y: 200,
+                x: 400,
+                y: 300,
                 speedX: 5,
                 speedY: 5,
                 fired: false,
@@ -61,10 +61,10 @@
             }
             o.move = function() {
                 if (o.fired) {
-                   if(o.x < 0 || o.x > 400) {
+                   if(o.x < 0 || o.x > 730) {
                        o.speedX = -o.speedX
                    }
-                   if(o.y < 0 || o.y > 300) {
+                   if(o.y < 0 || o.y > 525) {
                        o.speedY = -o.speedY
                    }
                    o.x += o.speedX
@@ -126,7 +126,7 @@
             var game = GuaGame()
 
             var paddle = Paddle()
-            var ball = Ball()
+            ball = Ball()
 
             game.registerAction('a', function(){
                 paddle.moveLeft()
