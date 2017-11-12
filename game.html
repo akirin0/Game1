@@ -61,15 +61,52 @@
             }
             o.move = function() {
                 if (o.fired) {
-                   if(o.x < 0 || o.x >= 730) {
-                       o.speedX = -o.speedX
-                   }
-                   if(o.y < 0 || o.y >= 525) {
-                       o.speedY = -o.speedY
-                   }
-                   o.x += o.speedX
-                   o.y += o.speedY
+                    if (o.x < 0 || o.x >= 730) {
+                        o.speedX = -o.speedX
+                    }
+                    if (o.y < 0 || o.y >= 525) {
+                        o.speedY = -o.speedY
+                    }
+                    o.x += o.speedX
+                    o.y += o.speedY
                 }
+            }
+            o.bounce = function() {
+                o.speedY *= -1
+            }
+
+            return o
+        }
+
+        var rectIntersects = function(a,b) {
+            var ball = b
+            var o = a
+            if(ball.y > o.y && b.y < o.y + ball.image.height ) {
+                if (ball.x > o.x && ball.x < o.x + o.image.width) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        var Block = function() {
+            var image = imageFromPath('block.png')
+            var o = {
+                image: image,
+                x: 100,
+                y: 100,
+                w: 50,
+                h:20,
+                alive: true,
+
+            }
+
+            o.kill = function() {
+                o.alive = false
+            }
+
+            o.collide = function(ball) {
+                return o.alive && (rectIntersects(o,ball) || rectIntersects(ball, o))
             }
             return o
         }
@@ -126,7 +163,18 @@
             var game = GuaGame()
 
             var paddle = Paddle()
-            ball = Ball()
+            var ball = Ball()
+
+            var blocks = []
+            for(var i=0; i< 3; i++) {
+                var b = Block()
+
+                //设置block坐标
+                b.x = i*150
+                b.y = 50
+
+                blocks.push(b)
+            }
 
             game.registerAction('a', function(){
                 paddle.moveLeft()
@@ -143,7 +191,15 @@
             game.update = function() {
                 ball.move()
                 if(paddle.collide(ball)) {
-                    ball.speedY = -ball.speedY
+                    ball.bounce()
+                }
+
+                for(var i=0; i<blocks.length; i++) {
+                    var block = blocks[i]
+                    if (block.collide(ball)) {
+                        block.kill()
+                        ball.bounce()
+                    }
                 }
             }
 
@@ -151,6 +207,14 @@
                 //draw
                 game.drawImage(paddle)
                 game.drawImage(ball)
+                // draw blocks
+
+                for(var i=0; i<blocks.length; i++) {
+                    var block = blocks[i]
+                    if (block.alive) {
+                        game.drawImage(block)
+                    }
+                }
             }
 
 
