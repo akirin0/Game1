@@ -35,7 +35,7 @@
                 o.x += o.speed
             }
             o.collide = function(ball) {
-                if(ball.y + ball.image.height > o.y) {
+                if(ball.y + ball.image.height >= o.y) {
                     if(ball.x > o.x && ball.x < o.x + o.image.width){
                         return true
                     }
@@ -61,10 +61,10 @@
             }
             o.move = function() {
                 if (o.fired) {
-                   if(o.x < 0 || o.x > 730) {
+                   if(o.x < 0 || o.x >= 730) {
                        o.speedX = -o.speedX
                    }
-                   if(o.y < 0 || o.y > 525) {
+                   if(o.y < 0 || o.y >= 525) {
                        o.speedY = -o.speedY
                    }
                    o.x += o.speedX
